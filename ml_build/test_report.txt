@@ -1,0 +1,29 @@
+Video: dataset\hello\hello1.mp4 | Predicted: hello | Actual: hello | ✅
+Video: dataset\hello\hello10.mp4 | Predicted: hello | Actual: hello | ✅
+Video: dataset\hello\hello11.mp4 | Predicted: hello | Actual: hello | ✅
+Video: dataset\hello\hello12.mp4 | Predicted: hello | Actual: hello | ✅
+Video: dataset\hello\hello13.mp4 | Predicted: hello | Actual: hello | ✅
+Video: dataset\help\help1.mp4 | Predicted: help | Actual: help | ✅
+Video: dataset\help\help10.mp4 | Predicted: help | Actual: help | ✅
+Video: dataset\help\help11.mp4 | Predicted: help | Actual: help | ✅
+Video: dataset\help\help12.mp4 | Predicted: help | Actual: help | ✅
+Video: dataset\help\help13.mp4 | Predicted: help | Actual: help | ✅
+Video: dataset\how_are_you\how_are_you1.mp4 | Predicted: how_are_you | Actual: how_are_you | ✅
+Video: dataset\how_are_you\how_are_you10.mp4 | Predicted: how_are_you | Actual: how_are_you | ✅
+Video: dataset\how_are_you\how_are_you11.mp4 | Predicted: how_are_you | Actual: how_are_you | ✅
+Video: dataset\how_are_you\how_are_you12.mp4 | Predicted: how_are_you | Actual: how_are_you | ✅
+Video: dataset\how_are_you\how_are_you13.mp4 | Predicted: how_are_you | Actual: how_are_you | ✅
+Video: dataset\indian_sign_language\indian_sign_language1.mp4 | Predicted: indian_sign_language | Actual: indian_sign_language | ✅
+Video: dataset\indian_sign_language\indian_sign_language10.mp4 | Predicted: indian_sign_language | Actual: indian_sign_language | ✅
+Video: dataset\indian_sign_language\indian_sign_language11.mp4 | Predicted: indian_sign_language | Actual: indian_sign_language | ✅
+Video: dataset\indian_sign_language\indian_sign_language12.mp4 | Predicted: indian_sign_language | Actual: indian_sign_language | ✅
+Video: dataset\indian_sign_language\indian_sign_language13.mp4 | Predicted: indian_sign_language | Actual: indian_sign_language | ✅
+Video: dataset\nice_to_meet_you\nice_to_meet_you1.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
+Video: dataset\nice_to_meet_you\nice_to_meet_you10.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
+Video: dataset\nice_to_meet_you\nice_to_meet_you11.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
+Video: dataset\nice_to_meet_you\nice_to_meet_you12.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
+Video: dataset\nice_to_meet_you\nice_to_meet_you13.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
+
+Total Test Videos: 25
+Correct Predictions: 25
+Accuracy: 100.00%

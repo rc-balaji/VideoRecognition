@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Sign Recognition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Header -->
+            <div class="bg-blue-600 py-6 px-8 text-center">
+                <h1 class="text-3xl font-bold text-white">Hand Sign Recognition</h1>
+                <p class="text-blue-100 mt-2">Upload a video to detect the hand sign</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-8">
+                <!-- Upload Area -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-8 transition-all hover:border-blue-400 hover:bg-blue-50"
+                    id="dropZone">
+                    <input type="file" id="fileInput" accept="video/*" class="hidden">
+                    <div class="flex flex-col items-center justify-center">
+                        <i class="fas fa-video text-5xl text-blue-500 mb-4"></i>
+                        <h2 class="text-xl font-semibold text-gray-700 mb-2">Upload a Video</h2>
+                        <p class="text-gray-500 mb-4">Supported formats: MP4, AVI, MOV, MKV</p>
+                        <button id="uploadBtn"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                            Select File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="mb-8 hidden" id="previewSection">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Video Preview</h3>
+                    <div class="relative bg-black rounded-lg overflow-hidden">
+                        <video id="videoPreview" controls class="w-full h-auto max-h-96 mx-auto"></video>
+                        <div class="absolute inset-0 flex items-center justify-center hidden" id="processingOverlay">
+                            <div class="text-center bg-black bg-opacity-70 p-6 rounded-lg">
+                                <div
+                                    class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4">
+                                </div>
+                                <p class="text-white font-medium">Processing video...</p>
+                                <p class="text-blue-200 text-sm mt-1" id="progressText">Analyzing frames</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="hidden" id="resultsSection">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Recognition Results</h3>
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="flex-1">
+                                <div class="space-y-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Predicted Sign</p>
+                                        <p class="text-xl font-semibold text-blue-600" id="predictedLabel">--</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Confidence</p>
+                                        <p class="text-xl font-semibold" id="confidenceValue">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-white p-4 rounded-lg border border-gray-200">
+                                    <h4 class="font-medium text-gray-700 mb-3">Confidence Distribution</h4>
+                                    <div class="space-y-3" id="confidenceBars">
+                                        <!-- Confidence bars will be added here dynamically -->
+                                        <p class="text-gray-400 text-center py-4">Results will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Section -->
+                <div class="hidden" id="errorSection">
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-circle text-red-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700" id="errorMessage"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const dropZone = document.getElementById('dropZone');
+            const videoPreview = document.getElementById('videoPreview');
+            const previewSection = document.getElementById('previewSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const errorSection = document.getElementById('errorSection');
+            const processingOverlay = document.getElementById('processingOverlay');
+            const progressText = document.getElementById('progressText');
+            const predictedLabel = document.getElementById('predictedLabel');
+            const confidenceValue = document.getElementById('confidenceValue');
+            const confidenceBars = document.getElementById('confidenceBars');
+
+            // Handle file selection
+            uploadBtn.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', handleFileSelect);
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-blue-500', 'bg-blue-50');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileSelect({ target: fileInput });
+                }
+            });
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                // Reset UI
+                errorSection.classList.add('hidden');
+                resultsSection.classList.add('hidden');
+
+                // Validate file
+                const validExtensions = ['mp4', 'avi', 'mov', 'mkv'];
+                const fileExt = file.name.split('.').pop().toLowerCase();
+
+                if (!validExtensions.includes(fileExt)) {
+                    showError('Please upload a valid video file (MP4, AVI, MOV, MKV)');
+                    return;
+                }
+
+                if (file.size > 50 * 1024 * 1024) { // 50MB
+                    showError('File size should be less than 50MB');
+                    return;
+                }
+
+                // Show preview
+                const videoURL = URL.createObjectURL(file);
+                videoPreview.src = videoURL;
+                previewSection.classList.remove('hidden');
+
+                // Process video after metadata is loaded
+                videoPreview.onloadedmetadata = () => {
+                    // You could add some duration validation here if needed
+                };
+
+                // Handle form submission
+                processVideo(file);
+            }
+
+            function processVideo(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Show processing UI
+                processingOverlay.classList.remove('hidden');
+                videoPreview.controls = false;
+
+                // Simulate progress updates (remove this in production)
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 10;
+                    progressText.textContent =
+                        progress < 50 ? "Analyzing frames..." :
+                            progress < 80 ? "Processing features..." :
+                                "Finalizing prediction...";
+                    if (progress >= 100) clearInterval(progressInterval);
+                }, 300);
+
+                const API_URL = "http://127.0.0.1:5000"
+                // Make API call
+                fetch(API_URL + '/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        clearInterval(progressInterval);
+                        processingOverlay.classList.add('hidden');
+                        videoPreview.controls = true;
+
+                        if (!response.ok) {
+                            return response.json().then(err => { throw new Error(err.error || 'Server error') });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.error);
+                        }
+
+                        // Display results
+                        predictedLabel.textContent = data.predicted_label;
+                        confidenceValue.textContent = data.confidence;
+
+                        // Update confidence bars (simulated - replace with actual class confidences if available)
+                        updateConfidenceBars(data.predicted_label, data.confidence);
+
+                        resultsSection.classList.remove('hidden');
+
+                        // Scroll to results
+                        setTimeout(() => {
+                            resultsSection.scrollIntoView({ behavior: 'smooth' });
+                        }, 300);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showError(error.message);
+                    });
+            }
+
+            function updateConfidenceBars(predictedLabel, confidence) {
+                // In a real app, you would get the actual class confidences from the API
+                // This is a simulation with some example classes
+                const exampleClasses = [
+                    { name: predictedLabel, value: parseFloat(confidence) },
+                    { name: "Other Sign 1", value: Math.random() * 30 },
+                    { name: "Other Sign 2", value: Math.random() * 30 },
+                    { name: "Other Sign 3", value: Math.random() * 20 },
+                    { name: "Other Sign 4", value: Math.random() * 15 }
+                ];
+
+                // Sort by confidence
+                exampleClasses.sort((a, b) => b.value - a.value);
+
+                // Clear existing bars
+                confidenceBars.innerHTML = '';
+
+                // Add new bars
+                exampleClasses.forEach(cls => {
+                    const isPredicted = cls.name === predictedLabel;
+                    const barColor = isPredicted ? 'bg-blue-500' : 'bg-gray-300';
+                    const textColor = isPredicted ? 'text-blue-600 font-medium' : 'text-gray-500';
+
+                    const barHtml = `
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-sm">
+                                <span class="${textColor}">${cls.name}</span>
+                                <span class="${textColor}">${cls.value.toFixed(1)}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="h-2.5 rounded-full ${barColor}" 
+                                     style="width: ${cls.value}%"></div>
+                            </div>
+                        </div>
+                    `;
+                    confidenceBars.insertAdjacentHTML('beforeend', barHtml);
+                });
+            }
+
+            function showError(message) {
+                errorSection.classList.remove('hidden');
+                document.getElementById('errorMessage').textContent = message;
+                setTimeout(() => {
+                    errorSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+
+</html>
