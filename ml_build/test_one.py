@@ -4,6 +4,10 @@ import cv2
 import numpy as np
 from train import ActionRecognitionModel
 
+CHECK_POINT = "./checkpoints/hs_model.ckpt"
+video_path = r"dataset\hello\hello5.mp4"
+label_file = "labels.txt"
+
 
 class ActionPredictor:
     def __init__(self, checkpoint_path, class_names, frame_count=16, resize=(112, 112)):
@@ -54,9 +58,6 @@ class ActionPredictor:
         return self.class_names[pred_class], probs[0].cpu().numpy()
 
 
-label_file = "labels.txt"
-
-
 def get_labels():
     if os.path.exists(label_file):
         with open(label_file, "r") as f:
@@ -68,11 +69,9 @@ if __name__ == "__main__":
     class_names = get_labels()
 
     predictor = ActionPredictor(
-        checkpoint_path="checkpoints/action-recog-epoch=06-val_acc=1.00.ckpt",
+        checkpoint_path=CHECK_POINT,
         class_names=class_names,
     )
-
-    video_path = "hell_me.mp4"
 
     if not os.path.exists(video_path):
         print(f"Error: File '{video_path}' not found.")

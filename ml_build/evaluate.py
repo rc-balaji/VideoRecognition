@@ -8,6 +8,9 @@ from train import ActionRecognitionModel
 from data_preparation import VideoDataset
 
 
+CHECK_POINT = "./checkpoints/hs_model.ckpt"
+
+
 def evaluate_model(checkpoint_path, dataset_path):
     # Load data
     dataset = VideoDataset(dataset_path)
@@ -63,6 +66,6 @@ def evaluate_model(checkpoint_path, dataset_path):
 
 if __name__ == "__main__":
     evaluate_model(
-        checkpoint_path="./checkpoints/action-recog-epoch=01-val_acc=1.00.ckpt",
+        checkpoint_path=CHECK_POINT,
         dataset_path="dataset",
     )

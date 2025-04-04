@@ -1,0 +1,6 @@
+# Ignore all .ckpt files
+*.ckpt
+*.mp4
+
+# Ignore all .oo files
+*.oo

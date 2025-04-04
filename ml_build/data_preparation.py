@@ -85,6 +85,7 @@ if __name__ == "__main__":
     dataset = VideoDataset("dataset")
     X_train, X_test, y_train, y_test, classes = dataset.prepare_dataset()
 
+    print(f"Total Classes: {len(classes)}")
     print(f"Classes: {classes}")
     print(f"Train shape: {X_train.shape}")
     print(f"Test shape: {X_test.shape}")

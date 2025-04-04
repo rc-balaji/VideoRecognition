@@ -8,10 +8,14 @@ app.config["UPLOAD_FOLDER"] = "uploads"
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50MB limit
 app.config["ALLOWED_EXTENSIONS"] = {"mp4", "avi", "mov", "mkv"}
 
+
+CHECK_POINT = "./models/hs_model.ckpt"
+LABELS = "./models/labels.txt"
+
 # Initialize model
 model = HandSignModel(
-    checkpoint_path="models/action-recog-epoch=06-val_acc=1.00.ckpt",
-    label_file="models/labels.txt",
+    checkpoint_path=CHECK_POINT,
+    label_file=LABELS,
 )
 
 

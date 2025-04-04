@@ -1,3 +1,28 @@
+Video: dataset\again\again1.mp4 | Predicted: again | Actual: again | ✅
+Video: dataset\again\again10.mp4 | Predicted: again | Actual: again | ✅
+Video: dataset\again\again11.mp4 | Predicted: again | Actual: again | ✅
+Video: dataset\again\again12.mp4 | Predicted: again | Actual: again | ✅
+Video: dataset\again\again13.mp4 | Predicted: again | Actual: again | ✅
+Video: dataset\clever\clever1.mp4 | Predicted: clever | Actual: clever | ✅
+Video: dataset\clever\clever10.mp4 | Predicted: clever | Actual: clever | ✅
+Video: dataset\clever\clever11.mp4 | Predicted: clever | Actual: clever | ✅
+Video: dataset\clever\clever12.mp4 | Predicted: clever | Actual: clever | ✅
+Video: dataset\clever\clever13.mp4 | Predicted: clever | Actual: clever | ✅
+Video: dataset\congratulations\congratulations1.mp4 | Predicted: congratulations | Actual: congratulations | ✅
+Video: dataset\congratulations\congratulations10.mp4 | Predicted: congratulations | Actual: congratulations | ✅
+Video: dataset\congratulations\congratulations11.mp4 | Predicted: congratulations | Actual: congratulations | ✅
+Video: dataset\congratulations\congratulations12.mp4 | Predicted: congratulations | Actual: congratulations | ✅
+Video: dataset\congratulations\congratulations13.mp4 | Predicted: congratulations | Actual: congratulations | ✅
+Video: dataset\equal\equal1.mp4 | Predicted: equal | Actual: equal | ✅
+Video: dataset\equal\equal10.mp4 | Predicted: equal | Actual: equal | ✅
+Video: dataset\equal\equal11.mp4 | Predicted: equal | Actual: equal | ✅
+Video: dataset\equal\equal12.mp4 | Predicted: equal | Actual: equal | ✅
+Video: dataset\equal\equal13.mp4 | Predicted: equal | Actual: equal | ✅
+Video: dataset\glad_to_see_you\glad_to_see_you1.mp4 | Predicted: glad_to_see_you | Actual: glad_to_see_you | ✅
+Video: dataset\glad_to_see_you\glad_to_see_you10.mp4 | Predicted: glad_to_see_you | Actual: glad_to_see_you | ✅
+Video: dataset\glad_to_see_you\glad_to_see_you11.mp4 | Predicted: glad_to_see_you | Actual: glad_to_see_you | ✅
+Video: dataset\glad_to_see_you\glad_to_see_you12.mp4 | Predicted: glad_to_see_you | Actual: glad_to_see_you | ✅
+Video: dataset\glad_to_see_you\glad_to_see_you13.mp4 | Predicted: glad_to_see_you | Actual: glad_to_see_you | ✅
 Video: dataset\hello\hello1.mp4 | Predicted: hello | Actual: hello | ✅
 Video: dataset\hello\hello10.mp4 | Predicted: hello | Actual: hello | ✅
 Video: dataset\hello\hello11.mp4 | Predicted: hello | Actual: hello | ✅
@@ -23,7 +48,42 @@ Video: dataset\nice_to_meet_you\nice_to_meet_you10.mp4 | Predicted: nice_to_meet
 Video: dataset\nice_to_meet_you\nice_to_meet_you11.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
 Video: dataset\nice_to_meet_you\nice_to_meet_you12.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
 Video: dataset\nice_to_meet_you\nice_to_meet_you13.mp4 | Predicted: nice_to_meet_you | Actual: nice_to_meet_you | ✅
+Video: dataset\no\no1.mp4 | Predicted: no | Actual: no | ✅
+Video: dataset\no\no10.mp4 | Predicted: no | Actual: no | ✅
+Video: dataset\no\no11.mp4 | Predicted: no | Actual: no | ✅
+Video: dataset\no\no12.mp4 | Predicted: no | Actual: no | ✅
+Video: dataset\no\no13.mp4 | Predicted: no | Actual: no | ✅
+Video: dataset\please\please1.mp4 | Predicted: please | Actual: please | ✅
+Video: dataset\please\please10.mp4 | Predicted: please | Actual: please | ✅
+Video: dataset\please\please11.mp4 | Predicted: please | Actual: please | ✅
+Video: dataset\please\please12.mp4 | Predicted: please | Actual: please | ✅
+Video: dataset\please\please13.mp4 | Predicted: please | Actual: please | ✅
+Video: dataset\sentence\sentence1.mp4 | Predicted: sentence | Actual: sentence | ✅
+Video: dataset\sentence\sentence10.mp4 | Predicted: sentence | Actual: sentence | ✅
+Video: dataset\sentence\sentence11.mp4 | Predicted: sentence | Actual: sentence | ✅
+Video: dataset\sentence\sentence12.mp4 | Predicted: sentence | Actual: sentence | ✅
+Video: dataset\sentence\sentence13.mp4 | Predicted: sentence | Actual: sentence | ✅
+Video: dataset\technolgy\technolgy1.mp4 | Predicted: technolgy | Actual: technolgy | ✅
+Video: dataset\technolgy\technolgy10.mp4 | Predicted: technolgy | Actual: technolgy | ✅
+Video: dataset\technolgy\technolgy11.mp4 | Predicted: technolgy | Actual: technolgy | ✅
+Video: dataset\technolgy\technolgy12.mp4 | Predicted: technolgy | Actual: technolgy | ✅
+Video: dataset\technolgy\technolgy13.mp4 | Predicted: technolgy | Actual: technolgy | ✅
+Video: dataset\think\think1.mp4 | Predicted: think | Actual: think | ✅
+Video: dataset\think\think10.mp4 | Predicted: think | Actual: think | ✅
+Video: dataset\think\think11.mp4 | Predicted: think | Actual: think | ✅
+Video: dataset\think\think12.mp4 | Predicted: think | Actual: think | ✅
+Video: dataset\think\think13.mp4 | Predicted: think | Actual: think | ✅
+Video: dataset\unequal\unequal1.mp4 | Predicted: unequal | Actual: unequal | ✅
+Video: dataset\unequal\unequal10.mp4 | Predicted: unequal | Actual: unequal | ✅
+Video: dataset\unequal\unequal11.mp4 | Predicted: unequal | Actual: unequal | ✅
+Video: dataset\unequal\unequal12.mp4 | Predicted: unequal | Actual: unequal | ✅
+Video: dataset\unequal\unequal13.mp4 | Predicted: unequal | Actual: unequal | ✅
+Video: dataset\yes\yes1.mp4 | Predicted: yes | Actual: yes | ✅
+Video: dataset\yes\yes10.mp4 | Predicted: yes | Actual: yes | ✅
+Video: dataset\yes\yes11.mp4 | Predicted: yes | Actual: yes | ✅
+Video: dataset\yes\yes12.mp4 | Predicted: yes | Actual: yes | ✅
+Video: dataset\yes\yes13.mp4 | Predicted: yes | Actual: yes | ✅
 
-Total Test Videos: 25
-Correct Predictions: 25
+Total Test Videos: 85
+Correct Predictions: 85
 Accuracy: 100.00%

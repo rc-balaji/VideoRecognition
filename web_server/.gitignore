@@ -1,0 +1,5 @@
+# Ignore all .ckpt files
+*.ckpt
+
+# Ignore all .oo files
+*.oo

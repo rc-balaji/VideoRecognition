@@ -4,7 +4,11 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.loggers import TensorBoardLogger
 from torchvision.models.video import r3d_18, R3D_18_Weights
+
+# Enable Tensor Cores optimization for compatible GPUs
+torch.set_float32_matmul_precision("high")
 
 
 class ActionRecognitionModel(pl.LightningModule):
@@ -12,17 +16,17 @@ class ActionRecognitionModel(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters()
 
-        # Load pretrained model
+        # Load pretrained 3D ResNet
         self.model = r3d_18(weights=R3D_18_Weights.DEFAULT)
 
-        # Replace the last layer for our number of classes
+        # Replace last FC layer for action classes
         num_features = self.model.fc.in_features
         self.model.fc = nn.Linear(num_features, num_classes)
 
         self.loss_fn = nn.CrossEntropyLoss()
 
     def forward(self, x):
-        # Input shape: (batch, channels, frames, height, width)
+        # x: (batch, channels, frames, height, width)
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
@@ -31,7 +35,6 @@ class ActionRecognitionModel(pl.LightningModule):
         loss = self.loss_fn(logits, y)
         self.log("train_loss", loss)
 
-        # Calculate accuracy
         preds = torch.argmax(logits, dim=1)
         acc = (preds == y).float().mean()
         self.log("train_acc", acc, prog_bar=True)
@@ -51,30 +54,34 @@ class ActionRecognitionModel(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
-        return optimizer
+        return optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
 
 
 def train_model(X_train, y_train, X_test, y_test, classes, epochs=10, batch_size=8):
-    # Convert numpy arrays to PyTorch tensors
-    # Need to reshape to (batch, channels, frames, height, width)
+    # Convert and reshape: (N, T, H, W, C) -> (N, C, T, H, W)
     X_train = torch.tensor(X_train).permute(0, 4, 1, 2, 3).float()
     y_train = torch.tensor(y_train).long()
 
     X_test = torch.tensor(X_test).permute(0, 4, 1, 2, 3).float()
     y_test = torch.tensor(y_test).long()
 
-    # Create datasets and dataloaders
-    train_dataset = TensorDataset(X_train, y_train)
-    val_dataset = TensorDataset(X_test, y_test)
+    # Data loaders
+    train_loader = DataLoader(
+        TensorDataset(X_train, y_train),
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=4,
+    )
+    val_loader = DataLoader(
+        TensorDataset(X_test, y_test),
+        batch_size=batch_size,
+        num_workers=4,
+    )
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size)
-
-    # Initialize model
+    # Model
     model = ActionRecognitionModel(num_classes=len(classes))
 
-    # Setup callbacks
+    # Callbacks
     checkpoint_callback = ModelCheckpoint(
         monitor="val_acc",
         mode="max",
@@ -83,10 +90,14 @@ def train_model(X_train, y_train, X_test, y_test, classes, epochs=10, batch_size
         filename="action-recog-{epoch:02d}-{val_acc:.2f}",
     )
 
-    # Train
+    # Logger
+    logger = TensorBoardLogger("lightning_logs", name="action_recognition")
+
+    # Trainer
     trainer = pl.Trainer(
         max_epochs=epochs,
         callbacks=[checkpoint_callback],
+        logger=logger,
         accelerator="auto",
         devices=1 if torch.cuda.is_available() else None,
     )
@@ -99,9 +110,9 @@ def train_model(X_train, y_train, X_test, y_test, classes, epochs=10, batch_size
 if __name__ == "__main__":
     from data_preparation import VideoDataset
 
-    # Prepare data
+    # Prepare dataset
     dataset = VideoDataset("dataset")
     X_train, X_test, y_train, y_test, classes = dataset.prepare_dataset()
 
-    # Train model
+    # Train
     train_model(X_train, y_train, X_test, y_test, classes, epochs=20)

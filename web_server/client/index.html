@@ -11,7 +11,7 @@
 
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
             <!-- Header -->
             <div class="bg-blue-600 py-6 px-8 text-center">
                 <h1 class="text-3xl font-bold text-white">Hand Sign Recognition</h1>
@@ -20,33 +20,37 @@
 
             <!-- Main Content -->
             <div class="p-8">
-                <!-- Upload Area -->
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-8 transition-all hover:border-blue-400 hover:bg-blue-50"
-                    id="dropZone">
-                    <input type="file" id="fileInput" accept="video/*" class="hidden">
-                    <div class="flex flex-col items-center justify-center">
-                        <i class="fas fa-video text-5xl text-blue-500 mb-4"></i>
-                        <h2 class="text-xl font-semibold text-gray-700 mb-2">Upload a Video</h2>
-                        <p class="text-gray-500 mb-4">Supported formats: MP4, AVI, MOV, MKV</p>
-                        <button id="uploadBtn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
-                            Select File
-                        </button>
-                    </div>
-                </div>
+                <div class="flex flex-col md:flex-row gap-8 mb-8">
 
-                <!-- Preview Section -->
-                <div class="mb-8 hidden" id="previewSection">
-                    <h3 class="text-lg font-medium text-gray-800 mb-3">Video Preview</h3>
-                    <div class="relative bg-black rounded-lg overflow-hidden">
-                        <video id="videoPreview" controls class="w-full h-auto max-h-96 mx-auto"></video>
-                        <div class="absolute inset-0 flex items-center justify-center hidden" id="processingOverlay">
-                            <div class="text-center bg-black bg-opacity-70 p-6 rounded-lg">
-                                <div
-                                    class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4">
+                    <!-- Upload Area -->
+                    <div class="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center transition-all hover:border-blue-400 hover:bg-blue-50"
+                        id="dropZone">
+
+                        <input type="file" id="fileInput" accept="video/*" class="hidden">
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <i class="fas fa-video text-5xl text-blue-500 mb-4"></i>
+                            <h2 class="text-xl font-semibold text-gray-700 mb-2">Upload a Video</h2>
+                            <p class="text-gray-500 mb-4">Supported formats: MP4, AVI, MOV, MKV</p>
+                            <button id="uploadBtn"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                                Select File
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div class="flex-1 hidden" id="previewSection">
+                        <div class="relative bg-black rounded-lg overflow-hidden h-full">
+                            <video id="videoPreview" controls class="w-full h-full max-h-96 mx-auto"></video>
+                            <div class="absolute inset-0 flex items-center justify-center hidden"
+                                id="processingOverlay">
+                                <div class="text-center bg-black bg-opacity-70 p-6 rounded-lg">
+                                    <div
+                                        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4">
+                                    </div>
+                                    <p class="text-white font-medium">Processing video...</p>
+                                    <p class="text-blue-200 text-sm mt-1" id="progressText">Analyzing frames</p>
                                 </div>
-                                <p class="text-white font-medium">Processing video...</p>
-                                <p class="text-blue-200 text-sm mt-1" id="progressText">Analyzing frames</p>
                             </div>
                         </div>
                     </div>
@@ -56,25 +60,16 @@
                 <div class="hidden" id="resultsSection">
                     <h3 class="text-lg font-medium text-gray-800 mb-3">Recognition Results</h3>
                     <div class="bg-gray-50 rounded-lg p-6">
-                        <div class="flex flex-col md:flex-row gap-6">
-                            <div class="flex-1">
+                        <div class="flex flex-col">
+                            <div>
                                 <div class="space-y-4">
                                     <div>
-                                        <p class="text-sm text-gray-500">Predicted Sign</p>
-                                        <p class="text-xl font-semibold text-blue-600" id="predictedLabel">--</p>
+                                        <p class="text-sm text-gray-500">Predicted Sentence</p>
+                                        <p class="text-2xl font-semibold text-blue-600" id="predictedLabel">--</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Confidence</p>
                                         <p class="text-xl font-semibold" id="confidenceValue">--</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="bg-white p-4 rounded-lg border border-gray-200">
-                                    <h4 class="font-medium text-gray-700 mb-3">Confidence Distribution</h4>
-                                    <div class="space-y-3" id="confidenceBars">
-                                        <!-- Confidence bars will be added here dynamically -->
-                                        <p class="text-gray-400 text-center py-4">Results will appear here</p>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +107,25 @@
             const progressText = document.getElementById('progressText');
             const predictedLabel = document.getElementById('predictedLabel');
             const confidenceValue = document.getElementById('confidenceValue');
-            const confidenceBars = document.getElementById('confidenceBars');
+
+            let labelToSentence = {};
+
+            // Load the label mappings from JSON file
+            fetch('labels.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load label mappings');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    labelToSentence = data;
+                })
+                .catch(error => {
+                    console.error('Error loading label mappings:', error);
+                    // Fallback to empty object if JSON fails to load
+                    labelToSentence = {};
+                });
 
             // Handle file selection
             uploadBtn.addEventListener('click', () => fileInput.click());
@@ -212,12 +225,10 @@
                             throw new Error(data.error);
                         }
 
-                        // Display results
-                        predictedLabel.textContent = data.predicted_label;
-                        confidenceValue.textContent = data.confidence;
-
-                        // Update confidence bars (simulated - replace with actual class confidences if available)
-                        updateConfidenceBars(data.predicted_label, data.confidence);
+                        // Display results with mapped sentence
+                        const sentence = labelToSentence[data.predicted_label] || data.predicted_label;
+                        predictedLabel.textContent = sentence;
+                        confidenceValue.textContent = data.confidence + '%';
 
                         resultsSection.classList.remove('hidden');
 
@@ -230,45 +241,6 @@
                         console.error('Error:', error);
                         showError(error.message);
                     });
-            }
-
-            function updateConfidenceBars(predictedLabel, confidence) {
-                // In a real app, you would get the actual class confidences from the API
-                // This is a simulation with some example classes
-                const exampleClasses = [
-                    { name: predictedLabel, value: parseFloat(confidence) },
-                    { name: "Other Sign 1", value: Math.random() * 30 },
-                    { name: "Other Sign 2", value: Math.random() * 30 },
-                    { name: "Other Sign 3", value: Math.random() * 20 },
-                    { name: "Other Sign 4", value: Math.random() * 15 }
-                ];
-
-                // Sort by confidence
-                exampleClasses.sort((a, b) => b.value - a.value);
-
-                // Clear existing bars
-                confidenceBars.innerHTML = '';
-
-                // Add new bars
-                exampleClasses.forEach(cls => {
-                    const isPredicted = cls.name === predictedLabel;
-                    const barColor = isPredicted ? 'bg-blue-500' : 'bg-gray-300';
-                    const textColor = isPredicted ? 'text-blue-600 font-medium' : 'text-gray-500';
-
-                    const barHtml = `
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-sm">
-                                <span class="${textColor}">${cls.name}</span>
-                                <span class="${textColor}">${cls.value.toFixed(1)}%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="h-2.5 rounded-full ${barColor}" 
-                                     style="width: ${cls.value}%"></div>
-                            </div>
-                        </div>
-                    `;
-                    confidenceBars.insertAdjacentHTML('beforeend', barHtml);
-                });
             }
 
             function showError(message) {

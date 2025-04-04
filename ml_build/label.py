@@ -14,9 +14,13 @@ class Labels:
         ]
         with open(self.label_file, "w") as f:
             f.write(",".join(class_names))
+            print("Label created Successfull and Stored in labels.txt")
 
     def get_labels(self):
         if os.path.exists(self.label_file):
             with open(self.label_file, "r") as f:
                 return f.read().split(",")
         return []
+
+
+Labels().generate_labels()

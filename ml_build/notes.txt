@@ -1,5 +1,9 @@
 python313 data_preparation.py
 python313 train.py
+python313 evaluate.py
 python313 test.py
+
+python313 label.py
+
 python313 test_one.py
 python313 predict.py

@@ -5,6 +5,9 @@ import numpy as np
 from train import ActionRecognitionModel
 
 
+CHECK_POINT = "./checkpoints/hs_model.ckpt"
+
+
 def get_test_videos(dataset_path, num_videos=5):
     test_videos = []
     for folder in os.listdir(dataset_path):
@@ -73,7 +76,7 @@ if __name__ == "__main__":
     test_videos = get_test_videos(dataset_path)
 
     predictor = ActionPredictor(
-        checkpoint_path="checkpoints/action-recog-epoch=06-val_acc=1.00.ckpt",
+        checkpoint_path=CHECK_POINT,
         class_names=[
             folder
             for folder in os.listdir(dataset_path)
